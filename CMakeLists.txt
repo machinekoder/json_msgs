@@ -1,13 +1,35 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
+
 project(json_msgs)
-add_definitions(-std=c++11)
 
-find_package(catkin REQUIRED COMPONENTS message_generation std_msgs)
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
-add_message_files(FILES JsonData.msg)
+find_package(ament_cmake REQUIRED)
+# find the ROS message code generators
+find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
 
-add_service_files(FILES JsonService.srv)
+# declare the message files to generate code for
+set(msg_files
+   "msg/JsonData.msg"
+ )
 
-generate_messages(DEPENDENCIES std_msgs)
+# declare the service files to generate code for
+set(srv_files
+   "srv/JsonService.srv"
+)
 
-catkin_package(CATKIN_DEPENDS message_runtime std_msgs)
+rosidl_generate_interfaces(${PROJECT_NAME}
+   ${msg_files}
+   ${srv_files}
+   DEPENDENCIES std_msgs
+ )
+
+ament_export_dependencies(rosidl_default_runtime)
+ament_package()
