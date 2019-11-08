@@ -1,0 +1,9 @@
+# Service which accepts a JSON encoded command
+
+# JSON encoded command data
+string data
+---
+# Returns true if the command execution was successful
+bool success
+# JSON encoded response data
+string data
